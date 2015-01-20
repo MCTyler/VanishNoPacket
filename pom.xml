@@ -13,6 +13,8 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <vnp-version>${project.version}-unofficial</vnp-version>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
   </properties>
 
   <profiles>
@@ -84,22 +86,6 @@
       <version>3.6.3-SNAPSHOT</version>
       <type>jar</type>
       <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>de.bananaco</groupId>
-      <artifactId>bPermissions</artifactId>
-      <version>v2.12-DEV</version>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>org.bukkit</groupId>
-          <artifactId>craftbukkit</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.bukkit</groupId>
-          <artifactId>bukkit</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.earth2me</groupId>

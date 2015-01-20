@@ -63,7 +63,6 @@ public final class ProtocolLibHook extends Hook {
                 }
             });
         } else {
-            return;
         }
     }
 }

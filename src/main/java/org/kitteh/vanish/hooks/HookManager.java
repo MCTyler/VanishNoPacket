@@ -9,26 +9,18 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.Debuggle;
 import org.kitteh.vanish.VanishPlugin;
-import org.kitteh.vanish.hooks.plugins.BPermissionsHook;
-//import org.kitteh.vanish.hooks.plugins.DisguiseCraftHook;
-//import org.kitteh.vanish.hooks.plugins.DynmapHook;
 import org.kitteh.vanish.hooks.plugins.EssentialsHook;
 import org.kitteh.vanish.hooks.plugins.GeoIPToolsHook;
 import org.kitteh.vanish.hooks.plugins.JSONAPIHook;
 import org.kitteh.vanish.hooks.plugins.ProtocolLibHook;
-//import org.kitteh.vanish.hooks.plugins.SpoutCraftHook;
 import org.kitteh.vanish.hooks.plugins.VaultHook;
 
 public final class HookManager {
     public enum HookType {
-        BPermissions(BPermissionsHook.class),
-        //DisguiseCraft(DisguiseCraftHook.class),
-        //Dynmap(DynmapHook.class),
         Essentials(EssentialsHook.class),
         GeoIPTools(GeoIPToolsHook.class),
         JSONAPI(JSONAPIHook.class),
         ProtocolLib(ProtocolLibHook.class),
-        //SpoutCraft(SpoutCraftHook.class),
         Vault(VaultHook.class);
 
         private final Class<? extends Hook> clazz;
@@ -42,7 +34,7 @@ public final class HookManager {
         }
     }
 
-    private final HashMap<String, Hook> hooks = new HashMap<String, Hook>();
+    private final HashMap<String, Hook> hooks = new HashMap<>();
     private final VanishPlugin plugin;
 
     public HookManager(VanishPlugin plugin) {
@@ -56,7 +48,7 @@ public final class HookManager {
      * @return a list of deregistered hook names. Empty list if nothing deregistered.
      */
     public List<String> deregisterHook(Hook hook) {
-        final List<String> ret = new ArrayList<String>();
+        final List<String> ret = new ArrayList<>();
         for (final Map.Entry<String, Hook> i : this.hooks.entrySet()) {
             if (i.getValue().equals(hook)) {
                 this.deregisterHook(i.getKey());
@@ -140,17 +132,7 @@ public final class HookManager {
     public void registerHook(String name, Class<? extends Hook> hookClazz) {
         try {
             this.registerHook(name, hookClazz.getConstructor(VanishPlugin.class).newInstance(this.plugin));
-        } catch (final NoSuchMethodException e) {
-            Debuggle.log("Failed to add hook " + name);
-        } catch (final SecurityException e) {
-            Debuggle.log("Failed to add hook " + name);
-        } catch (final InstantiationException e) {
-            Debuggle.log("Failed to add hook " + name);
-        } catch (final IllegalAccessException e) {
-            Debuggle.log("Failed to add hook " + name);
-        } catch (final IllegalArgumentException e) {
-            Debuggle.log("Failed to add hook " + name);
-        } catch (final InvocationTargetException e) {
+        } catch (final NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             Debuggle.log("Failed to add hook " + name);
         }
     }

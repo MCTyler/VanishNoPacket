@@ -20,7 +20,6 @@ public final class JSONAPIHook extends Hook {
             this.plugin.getLogger().info("Now hooking into JSONAPI");
         } else {
             this.plugin.getLogger().info("You wanted JSONAPI support. I could not find JSONAPI.");
-            return;
         }
     }
 }

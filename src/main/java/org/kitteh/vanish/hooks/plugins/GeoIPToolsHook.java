@@ -44,8 +44,10 @@ public final class GeoIPToolsHook extends Hook {
 
     @Override
     public void onEnable() {
+        @SuppressWarnings("LocalVariableHidesMemberVariable")
         final Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("GeoIPTools");
         if (plugin != null) {
+            @SuppressWarnings("LocalVariableHidesMemberVariable")
             final GeoIPTools geoip = (GeoIPTools) plugin;
             this.geoip = geoip.getGeoIPLookup();
         }

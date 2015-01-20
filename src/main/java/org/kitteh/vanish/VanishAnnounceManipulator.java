@@ -9,10 +9,8 @@ import java.util.logging.Level;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.hooks.HookManager.HookType;
-import org.kitteh.vanish.hooks.plugins.BPermissionsHook;
 import org.kitteh.vanish.hooks.plugins.GeoIPToolsHook;
 import org.kitteh.vanish.hooks.plugins.VaultHook;
-//import org.kitteh.vanish.metrics.MetricsOverlord;
 
 /**
  * Controller of announcing joins and quits that aren't their most honest.
@@ -27,8 +25,8 @@ public final class VanishAnnounceManipulator {
 
     VanishAnnounceManipulator(VanishPlugin plugin) {
         this.plugin = plugin;
-        this.playerOnlineStatus = new HashMap<String, Boolean>();
-        this.delayedAnnouncePlayerList = new ArrayList<String>();
+        this.playerOnlineStatus = new HashMap<>();
+        this.delayedAnnouncePlayerList = new ArrayList<>();
     }
 
     public void addToDelayedAnnounce(String player) {
@@ -84,20 +82,9 @@ public final class VanishAnnounceManipulator {
 
     private String injectPlayerInformation(String message, Player player) {
         final GeoIPToolsHook geoip = (GeoIPToolsHook) this.plugin.getHookManager().getHook(HookType.GeoIPTools);
-        final BPermissionsHook bperms = (BPermissionsHook) this.plugin.getHookManager().getHook(HookType.BPermissions);
         final VaultHook vault = (VaultHook) this.plugin.getHookManager().getHook(HookType.Vault);
         message = message.replace("%p", player.getName());
         message = message.replace("%d", player.getDisplayName());
-        String prefix = bperms.getPrefix(player);
-        if (prefix.isEmpty()) {
-            prefix = vault.getPrefix(player);
-        }
-        message = message.replace("%up", prefix);
-        String suffix = bperms.getSuffix(player);
-        if (suffix.isEmpty()) {
-            suffix = vault.getSuffix(player);
-        }
-        message = message.replace("%us", suffix);
         message = message.replace("%city", geoip.getCity(player));
         message = message.replace("%country", geoip.getCountry(player));
         return message;
@@ -107,7 +94,6 @@ public final class VanishAnnounceManipulator {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && this.playerOnlineStatus.get(player.getName()))) {
             this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeJoin(), player));
             this.plugin.getLogger().log(Level.INFO, "{0} faked joining", player.getName());
-            //MetricsOverlord.getFakejoinTracker().increment();
             this.playerOnlineStatus.put(player.getName(), true);
         }
     }
@@ -116,7 +102,6 @@ public final class VanishAnnounceManipulator {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && !this.playerOnlineStatus.get(player.getName()))) {
             this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeQuit(), player));
             this.plugin.getLogger().log(Level.INFO, "{0} faked quitting", player.getName());
-            //MetricsOverlord.getFakequitTracker().increment();
             this.playerOnlineStatus.put(player.getName(), false);
         }
     }

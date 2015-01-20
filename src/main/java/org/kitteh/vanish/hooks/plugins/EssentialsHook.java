@@ -9,6 +9,7 @@ import com.earth2me.essentials.IEssentials;
 
 @SuppressWarnings("deprecation")
 public final class EssentialsHook extends Hook {
+    @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     private final VanishPlugin plugin;
     private IEssentials essentials;
 
