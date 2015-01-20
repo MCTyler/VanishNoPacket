@@ -1,8 +1,9 @@
 VanishNoPacket
 Matt Baxter
 ============
- (This Fork has been stripped of all the extras (Spout, TagAPI, etc) compiled with Java 8 and (Spigot)Bukkit 1.8.1. 
- Do Not use unless you are sure your server is the same as mine.)
+ ###This Fork has been stripped of all the extras (Spout, TagAPI, etc) 
+ compiled with Java 8 and (Spigot)Bukkit 1.8.1. 
+ Do Not use unless you are sure your server is the same as mine.###
 
 
 For instructions on using this plugin
