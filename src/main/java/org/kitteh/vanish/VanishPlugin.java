@@ -18,8 +18,8 @@ import org.kitteh.vanish.listeners.ListenPlayerMessages;
 import org.kitteh.vanish.listeners.ListenPlayerOther;
 import org.kitteh.vanish.listeners.ListenServerPing;
 import org.kitteh.vanish.listeners.ListenToYourHeart;
-import org.kitteh.vanish.listeners.TagAPIListener;
-import org.kitteh.vanish.metrics.MetricsOverlord;
+//import org.kitteh.vanish.listeners.TagAPIListener;
+//import org.kitteh.vanish.metrics.MetricsOverlord;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,6 +29,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashSet;
+import java.util.logging.Level;
 
 public final class VanishPlugin extends JavaPlugin {
     final class UpdateCheck implements Runnable {
@@ -93,14 +94,14 @@ public final class VanishPlugin extends JavaPlugin {
             if (latest != null) {
                 this.plugin.latestVersion = latest;
                 if (!("v" + this.plugin.getCurrentVersion()).equals(latest)) {
-                    this.plugin.getLogger().info("Found a different version available: " + latest);
+                    this.plugin.getLogger().log(Level.INFO, "Found a different version available: {0}", latest);
                     this.plugin.getLogger().info("Check http://www.curse.com/server-mods/minecraft/vanish");
                     this.plugin.versionDiff = true;
                 }
             } else {
                 this.plugin.getLogger().info("Error: Could not check if plugin was up to date. Will try later");
                 if (exceptional != null) {
-                    this.plugin.getLogger().info("Exception message: " + exceptional.getMessage());
+                    this.plugin.getLogger().log(Level.INFO, "Exception message: {0}", exceptional.getMessage());
                 }
             }
         }
@@ -260,7 +261,7 @@ public final class VanishPlugin extends JavaPlugin {
         }
         this.hookManager.onDisable();
         this.manager.onPluginDisable();
-        this.getLogger().info(this.getCurrentVersion() + " unloaded.");
+        this.getLogger().log(Level.INFO, "{0} unloaded.", this.getCurrentVersion());
     }
 
     @Override
@@ -290,7 +291,7 @@ public final class VanishPlugin extends JavaPlugin {
                     this.getLogger().warning("Update to TagAPI 3.0 or later to use name coloring");
                     break dance;
                 }
-                this.getServer().getPluginManager().registerEvents(new TagAPIListener(this), this);
+                //this.getServer().getPluginManager().registerEvents(new TagAPIListener(this), this);
                 this.getLogger().info("Using color changing features of TagAPI.");
             } else {
                 this.getLogger().info("Colored nametags enabled, but I couldn't find TagAPI");
@@ -305,7 +306,7 @@ public final class VanishPlugin extends JavaPlugin {
         }
         this.hookManager.getHook(HookType.GeoIPTools).onEnable();
         if (this.getConfig().getBoolean("hooks.dynmap", false)) {
-            this.hookManager.getHook(HookType.Dynmap).onEnable();
+            //this.hookManager.getHook(HookType.Dynmap).onEnable();
         }
         //if (this.getServer().getPluginManager().getPlugin("ProtocolLib") != null) {
         //    this.hookManager.getHook(HookType.ProtocolLib).onEnable();
@@ -319,12 +320,12 @@ public final class VanishPlugin extends JavaPlugin {
                 if (VanishPlugin.this.getConfig().getBoolean("hooks.JSONAPI", false)) {
                     VanishPlugin.this.hookManager.getHook(HookType.JSONAPI).onEnable();
                 }
-                MetricsOverlord.init(self);
+                //MetricsOverlord.init(self);
             }
         }, 1);
 
         if (this.getConfig().getBoolean("hooks.spoutcraft", false)) {
-            this.hookManager.getHook(HookType.SpoutCraft).onEnable();
+            //this.hookManager.getHook(HookType.SpoutCraft).onEnable();
         }
 
         this.manager = new VanishManager(this);
@@ -360,7 +361,7 @@ public final class VanishPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ListenInventory(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenServerPing(this.manager), this);
 
-        this.getLogger().info(this.getCurrentVersion()+" loaded.");
+        this.getLogger().log(Level.INFO, "{0} loaded.", this.getCurrentVersion());
     }
 
     /**

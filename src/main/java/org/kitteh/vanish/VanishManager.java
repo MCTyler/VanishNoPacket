@@ -1,6 +1,7 @@
 package org.kitteh.vanish;
 
 import com.google.common.collect.ImmutableSet;
+import java.util.Collection;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -11,7 +12,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.kitteh.vanish.event.VanishStatusChangeEvent;
-import org.kitteh.vanish.metrics.MetricsOverlord;
+//import org.kitteh.vanish.metrics.MetricsOverlord;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public final class VanishManager {
     private final class ShowPlayerEntry {
@@ -233,6 +235,7 @@ public final class VanishManager {
      * @param vanishingPlayer
      * @param effects if true, trigger effects
      */
+    @SuppressWarnings("null")
     public void toggleVanishQuiet(Player vanishingPlayer, boolean effects) {
         final boolean vanishing = !this.isVanished(vanishingPlayer);
         final String vanishingPlayerName = vanishingPlayer.getName();
@@ -250,14 +253,14 @@ public final class VanishManager {
                 }
             }
             this.vanishedPlayerNames.add(vanishingPlayerName);
-            MetricsOverlord.getVanishTracker().increment();
-            this.plugin.getLogger().info(vanishingPlayerName + " disappeared.");
+            //MetricsOverlord.getVanishTracker().increment();
+            this.plugin.getLogger().log(Level.INFO, "{0} disappeared.", vanishingPlayerName);
         } else {
             Debuggle.log("It's visible time! " + vanishingPlayer.getName());
             this.resetSleepingIgnored(vanishingPlayer);
             this.removeVanished(vanishingPlayerName);
-            MetricsOverlord.getUnvanishTracker().increment();
-            this.plugin.getLogger().info(vanishingPlayerName + " reappeared.");
+            //MetricsOverlord.getUnvanishTracker().increment();
+            this.plugin.getLogger().log(Level.INFO, "{0} reappeared.", vanishingPlayerName);
         }
         if (effects) {
             final Location oneUp = vanishingPlayer.getLocation().add(0, 1, 0);
@@ -279,7 +282,7 @@ public final class VanishManager {
         }
         this.plugin.getServer().getPluginManager().callEvent(new VanishStatusChangeEvent(vanishingPlayer, vanishing));
         vanishingPlayer.sendPluginMessage(this.plugin, "vanishStatus", vanishing ? new byte[] { 0x01 } : new byte[] { 0x00 });
-        final Player[] playerList = this.plugin.getServer().getOnlinePlayers();
+        final Collection<? extends Player> playerList = this.plugin.getServer().getOnlinePlayers();
         for (final Player otherPlayer : playerList) {
             if (vanishingPlayer.equals(otherPlayer)) {
                 continue;

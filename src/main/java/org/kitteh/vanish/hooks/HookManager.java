@@ -1,5 +1,6 @@
 package org.kitteh.vanish.hooks;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,28 +10,28 @@ import org.bukkit.entity.Player;
 import org.kitteh.vanish.Debuggle;
 import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.hooks.plugins.BPermissionsHook;
-import org.kitteh.vanish.hooks.plugins.DisguiseCraftHook;
-import org.kitteh.vanish.hooks.plugins.DynmapHook;
+//import org.kitteh.vanish.hooks.plugins.DisguiseCraftHook;
+//import org.kitteh.vanish.hooks.plugins.DynmapHook;
 import org.kitteh.vanish.hooks.plugins.EssentialsHook;
 import org.kitteh.vanish.hooks.plugins.GeoIPToolsHook;
 import org.kitteh.vanish.hooks.plugins.JSONAPIHook;
 import org.kitteh.vanish.hooks.plugins.ProtocolLibHook;
-import org.kitteh.vanish.hooks.plugins.SpoutCraftHook;
+//import org.kitteh.vanish.hooks.plugins.SpoutCraftHook;
 import org.kitteh.vanish.hooks.plugins.VaultHook;
 
 public final class HookManager {
     public enum HookType {
         BPermissions(BPermissionsHook.class),
-        DisguiseCraft(DisguiseCraftHook.class),
-        Dynmap(DynmapHook.class),
+        //DisguiseCraft(DisguiseCraftHook.class),
+        //Dynmap(DynmapHook.class),
         Essentials(EssentialsHook.class),
         GeoIPTools(GeoIPToolsHook.class),
         JSONAPI(JSONAPIHook.class),
         ProtocolLib(ProtocolLibHook.class),
-        SpoutCraft(SpoutCraftHook.class),
+        //SpoutCraft(SpoutCraftHook.class),
         Vault(VaultHook.class);
 
-        private Class<? extends Hook> clazz;
+        private final Class<? extends Hook> clazz;
 
         HookType(Class<? extends Hook> clazz) {
             this.clazz = clazz;
@@ -139,9 +140,18 @@ public final class HookManager {
     public void registerHook(String name, Class<? extends Hook> hookClazz) {
         try {
             this.registerHook(name, hookClazz.getConstructor(VanishPlugin.class).newInstance(this.plugin));
-        } catch (final Exception e) {
+        } catch (final NoSuchMethodException e) {
             Debuggle.log("Failed to add hook " + name);
-            e.printStackTrace();
+        } catch (final SecurityException e) {
+            Debuggle.log("Failed to add hook " + name);
+        } catch (final InstantiationException e) {
+            Debuggle.log("Failed to add hook " + name);
+        } catch (final IllegalAccessException e) {
+            Debuggle.log("Failed to add hook " + name);
+        } catch (final IllegalArgumentException e) {
+            Debuggle.log("Failed to add hook " + name);
+        } catch (final InvocationTargetException e) {
+            Debuggle.log("Failed to add hook " + name);
         }
     }
 
